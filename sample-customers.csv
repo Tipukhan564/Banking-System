@@ -1,0 +1,6 @@
+firstName,lastName,email,cnic,phoneNumber,dateOfBirth,accountType
+Ahmed,Khan,ahmed.khan@example.com,42101-1234567-1,+923001234567,1990-05-15,SAVINGS
+Fatima,Ali,fatima.ali@example.com,42201-2345678-2,+923002345678,1992-08-20,CURRENT
+Hassan,Ahmed,hassan.ahmed@example.com,42301-3456789-3,+923003456789,1988-03-10,SAVINGS
+Ayesha,Malik,ayesha.malik@example.com,42401-4567890-4,+923004567890,1995-11-25,SAVINGS
+Usman,Raza,usman.raza@example.com,42501-5678901-5,+923005678901,1987-07-18,CURRENT
