@@ -47,7 +47,6 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
-                                "/h2-console/**",
                                 "/actuator/**"
                         ).permitAll()
                         .anyRequest().authenticated()
@@ -58,9 +57,6 @@ public class SecurityConfig {
 
         // Add JWT Filter BEFORE username-password authentication
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        // Allow H2 console
-        http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
         return http.build();
     }
