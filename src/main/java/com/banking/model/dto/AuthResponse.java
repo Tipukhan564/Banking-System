@@ -15,4 +15,6 @@ public class AuthResponse {
     private String email;
     private String firstName;
     private String lastName;
+    private String accountNumber;  // Add account number
+    private String iban;            // Add IBAN
 }

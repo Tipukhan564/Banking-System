@@ -3,9 +3,11 @@ package com.banking.controller;
 import com.banking.model.dto.AuthRequest;
 import com.banking.model.dto.AuthResponse;
 import com.banking.model.dto.RegisterRequest;
+import com.banking.model.entity.Account;
 import com.banking.model.entity.Customer;
 import com.banking.repository.CustomerRepository;
 import com.banking.security.JwtUtil;
+import com.banking.service.AccountService;
 import com.banking.service.EncryptionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class AuthController {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final EncryptionService encryptionService;
+    private final AccountService accountService;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
@@ -45,12 +48,20 @@ public class AuthController {
             Customer customer = customerRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new RuntimeException("Customer not found"));
 
+            // Get customer's account
+            Account account = accountService.getCustomerAccounts(customer.getId())
+                    .stream()
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("No account found for customer"));
+
             AuthResponse response = AuthResponse.builder()
                     .token(token)
                     .customerId(customer.getCustomerId())
                     .email(customer.getEmail())
                     .firstName(customer.getFirstName())
                     .lastName(customer.getLastName())
+                    .accountNumber(account.getAccountNumber())
+                    .iban(account.getIban())
                     .build();
 
             return ResponseEntity.ok(response);
@@ -86,6 +97,13 @@ public class AuthController {
 
         customer = customerRepository.save(customer);
 
+        // Automatically create a CURRENT account for the customer
+        Account account = accountService.createAccount(
+                customer.getId(),
+                Account.AccountType.CURRENT,
+                "PKR"
+        );
+
         final UserDetails userDetails = userDetailsService.loadUserByUsername(customer.getEmail());
         final String token = jwtUtil.generateToken(userDetails);
 
@@ -95,6 +113,8 @@ public class AuthController {
                 .email(customer.getEmail())
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
+                .accountNumber(account.getAccountNumber())
+                .iban(account.getIban())
                 .build();
 
         return ResponseEntity.ok(response);
