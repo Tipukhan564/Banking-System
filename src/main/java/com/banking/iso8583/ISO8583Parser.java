@@ -12,9 +12,6 @@ import java.util.BitSet;
 @Component
 public class ISO8583Parser {
 
-    private static final int BITMAP_SIZE = 64;
-    private static final int EXTENDED_BITMAP_SIZE = 128;
-
     /**
      * Parse ISO8583 message from byte array
      */

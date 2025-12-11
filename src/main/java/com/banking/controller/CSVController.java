@@ -16,7 +16,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/csv")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class CSVController {
 
     private final CSVProcessingService csvProcessingService;

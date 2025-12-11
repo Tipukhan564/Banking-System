@@ -4,7 +4,6 @@ import com.banking.model.entity.Account;
 import com.banking.model.entity.Customer;
 import com.banking.repository.CustomerRepository;
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

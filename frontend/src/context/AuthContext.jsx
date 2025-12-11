@@ -20,13 +20,28 @@ export const AuthProvider = ({ children }) => {
   axios.defaults.baseURL = "http://localhost:8080";
 
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      const userData = JSON.parse(localStorage.getItem("user") || "{}");
-      setUser(userData);
+    // Initialize auth state from localStorage
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken) {
+      setToken(storedToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
+
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (error) {
+          console.error("Failed to parse user data:", error);
+          localStorage.removeItem("user");
+        }
+      }
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
     }
+
     setLoading(false);
-  }, [token]);
+  }, []);
 
   // ============================
   // LOGIN
