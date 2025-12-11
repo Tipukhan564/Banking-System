@@ -16,14 +16,19 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    const result = await login(email, password);
+    try {
+      const result = await login(email, password);
 
-    if (result.success) {
-      localStorage.setItem("token", response.data.token);
-      toast.success('Login successful!');
-      navigate('/');
-    } else {
-      toast.error(result.error || 'Login failed');
+      if (result.success) {
+        toast.success('Login successful!');
+        navigate('/');
+      } else {
+        toast.error(result.error || 'Login failed');
+      }
+    } catch (error) {
+      toast.error('An error occurred during login');
+    } finally {
+      setLoading(false);
     }
   };
 

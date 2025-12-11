@@ -12,8 +12,31 @@ import Reports from './pages/Reports';
 import Layout from './components/Layout';
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-dark-900">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
+
+const PublicRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-dark-900">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  return !isAuthenticated ? children : <Navigate to="/" replace />;
 };
 
 function App() {
@@ -22,8 +45,8 @@ function App() {
       <Router>
         <Toaster position="top-right" />
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
           <Route
             path="/"
             element={

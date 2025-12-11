@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/reports")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class ReportController {
 
     private final ReportingService reportingService;
